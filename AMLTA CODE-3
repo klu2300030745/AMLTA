@@ -1,0 +1,17 @@
+from transformers import AutoTokenizer
+
+# Use a suitable model for classification (you can choose a lightweight one)
+clf_model_name = "distilbert-base-uncased"  # example  
+tokenizer_clf = AutoTokenizer.from_pretrained(clf_model_name)
+
+def tokenize_function(examples):
+    return tokenizer_clf(examples["text"], truncation=True, padding="max_length", max_length=128)
+
+train_dataset = train_dataset.map(tokenize_function, batched=True)
+test_dataset  = test_dataset.map(tokenize_function, batched=True)
+
+# set format
+train_dataset = train_dataset.remove_columns(["text"])
+test_dataset  = test_dataset.remove_columns(["text"])
+train_dataset.set_format("torch")
+test_dataset.set_format("torch")
