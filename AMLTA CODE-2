@@ -1,0 +1,11 @@
+# Example: use a public dataset, or load your CSV
+# For demonstration using a CSV (you replace with your own)
+df = pd.read_csv("your_hate_speech_data.csv")  # columns: “text”, “label” where label: e.g. 0-neutral,1-offensive,2-hate
+
+# Filter/clean if needed
+df = df.dropna(subset=["text","label"])
+train_df, test_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df["label"])
+
+# Convert to HuggingFace Dataset
+train_dataset = Dataset.from_pandas(train_df)
+test_dataset  = Dataset.from_pandas(test_df)
