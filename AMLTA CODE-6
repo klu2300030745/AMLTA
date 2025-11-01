@@ -1,0 +1,27 @@
+def detect_hate(text):
+    inputs = tokenizer_clf(text, return_tensors="pt", truncation=True, padding=True, max_length=128).to(model_clf.device)
+    with torch.no_grad():
+        outputs = model_clf(**inputs)
+    logits = outputs.logits
+    pred = torch.argmax(logits, dim=-1).item()
+    return pred  # e.g., 0 neutral, 1 offensive, 2 hate
+
+def generate_counter_narrative(text):
+    prompt = (
+        "You are a friendly moderator. A user post reads:\n"
+        f"\"{text}\"\n"
+        "Write a respectful counter-narrative response that addresses the hateful/offensive content and promotes constructive discussion."
+    )
+    inputs = tokenizer_gen(prompt, return_tensors="pt").to(model_gen.device)
+    output_ids = model_gen.generate(**inputs, max_new_tokens=100, temperature=0.7)
+    response = tokenizer_gen.decode(output_ids[0], skip_special_tokens=True)
+    return response
+
+# Example usage:
+post = "Some hateful or offensive social media comment goes here."
+label = detect_hate(post)
+if label == 2:  # assuming 2 == hate
+    reply = generate_counter_narrative(post)
+    print("Detected Hate ➜ Counter-Narrative:", reply)
+else:
+    print("No hate detected; label:", label)
