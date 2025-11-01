@@ -1,0 +1,11 @@
+# In Colab
+!pip install transformers torch datasets --quiet
+# Optionally: pip install hatesonar  (for quick detection baseline)  
+!pip install hatesonar --quiet
+
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from datasets import load_dataset, Dataset
