@@ -1,0 +1,4 @@
+gen_model_name = "ibm-granite/granite-4.0-350M"  # or “ibm-granite/granite-4.0-h-1B”
+tokenizer_gen = AutoTokenizer.from_pretrained(gen_model_name)
+model_gen = AutoModelForCausalLM.from_pretrained(gen_model_name, device_map="auto")
+model_gen.eval()
